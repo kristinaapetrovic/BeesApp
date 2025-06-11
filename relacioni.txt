@@ -1,0 +1,9 @@
+User(id, name, email, password)                     
+Pcelinjak(id, naziv, lokacija, user_id)            
+Kosnica(id, oznaka, tip, status, pcelinjak_id)      
+Drustvo(id, kosnica_id, matica_starost, jacina, datum_formiranja)  
+Aktivnost(id, naziv, opis, tip, pocetak, kraj, status, drustvo_id, user_id)                                                   
+Komentar(id, sadrzaj, datum, aktivnost_id, user_id) 
+Sugestija(id, poruka, datum_kreiranja, user_id, aktivnost_id)                                                    
+Notifikacija(id, tekst, datum_slanja, status, user_id)  
+                                                    
