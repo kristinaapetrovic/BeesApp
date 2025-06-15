@@ -3,15 +3,17 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Foundation\Auth\User as Authenticatable;
+use Laravel\Sanctum\HasApiTokens;
+use App\Notifications\Notifikacija;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, HasApiTokens;
 
     /**
      * The attributes that are mass assignable.
@@ -34,10 +36,7 @@ class User extends Authenticatable
         return $this->hasMany(Aktivnost::class);
     }
 
-    public function notifikacijas(): HasMany
-    {
-        return $this->hasMany(Notifikacija::class);
-    }
+    
 
     public function sugestijas(): HasMany
     {
@@ -48,6 +47,12 @@ class User extends Authenticatable
     {
         return $this->hasMany(Pcelinjak::class);
     }
+
+    public function notifications()
+    {
+        return $this->morphMany(\Illuminate\Notifications\DatabaseNotification::class, 'notifiable')->orderBy('created_at', 'desc');
+    }
+   
 
 
     /**

@@ -13,11 +13,15 @@ class Drustvo extends Model
     protected $fillable = ['kosnica_id', 'matica_starost', 'jacina', 'datum_formiranja'];
     public static $jacina = ['jako', 'srednje', 'slabo'];
 
-    
+
 
     public function aktivnosts(): HasMany
     {
         return $this->hasMany(Aktivnost::class);
     }
-    
+
+    public function kosnica(): BelongsTo
+    {
+        return $this->belongsTo(Kosnica::class);
+    }
 }

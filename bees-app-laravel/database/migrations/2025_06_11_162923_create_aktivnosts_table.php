@@ -16,10 +16,10 @@ return new class extends Migration
     {
         Schema::create('aktivnosts', function (Blueprint $table) {
             $table->id();
-             $table->string('naziv');
+            $table->string('naziv');
             $table->text('opis')->nullable();
             $table->enum('tip', Aktivnost::$tip);
-            $table->date('pocetak');
+            $table->dateTime('pocetak');
             $table->date('kraj')->nullable();
             $table->enum('status', Aktivnost::$status)->default('PLANIRANA');
             $table->foreignIdFor(Drustvo::class)->constrained()->onDelete('cascade');

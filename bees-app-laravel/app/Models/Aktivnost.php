@@ -7,10 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Aktivnost extends Model
+class Aktivnost extends Model 
 {
-    use HasFactory;
-    protected $fillable = ['naziv', 'opis', 'tip', 'pocetak', 'kraj', 'status', 'drustvo_id', 'user_id'];
+    use HasFactory; 
+    protected $fillable = ['naziv', 'opis', 'tip', 'pocetak', 'kraj', 'status', 'drustvo_id', 'user_id', 'notifikacija_poslata'];
     public static $tip=['SEZONSKA','NESEZONSKA'];
     public static $status=['PLANIRANA', 'U TOKU', 'ZAVRSENA'];
 

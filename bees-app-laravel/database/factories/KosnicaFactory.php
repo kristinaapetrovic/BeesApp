@@ -18,7 +18,7 @@ class KosnicaFactory extends Factory
     public function definition(): array
     {
         return [
-             'oznaka' => $this->faker->bothify('KSN-###'), 
+            'oznaka' => $this->faker->bothify('KSN-###'),
             'tip' => $this->faker->randomElement(['Langstroth', 'Dadant', 'Top-Bar', 'Warre']),
             'status' => $this->faker->randomElement(Kosnica::$status),
         ];
