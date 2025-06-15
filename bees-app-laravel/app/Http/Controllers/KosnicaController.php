@@ -17,9 +17,8 @@ class KosnicaController extends Controller
     public function index()
     { //kosnica-pcelinjak-user
         $user = Auth::user();
-        $kosnice = Kosnica::whereHas('pcelinjak', function ($query) use ($user) {
-            $query->where('user_id', $user->id);
-        });
+        $filteri = request()->only('tip', 'status', 'pcelinjak');
+        $kosnice = Kosnica::with('pcelinjak')->filter($filteri, $user);
         return KosnicaResource::collection($kosnice->latest()->paginate());
     }
 
@@ -44,6 +43,7 @@ class KosnicaController extends Controller
     public function show(Kosnica $kosnice)
     {
         if (Gate::authorize('view', $kosnice)) { 
+            $kosnice->load(['pcelinjak']);
             return new KosnicaResource($kosnice);
         }
     }
@@ -55,7 +55,6 @@ class KosnicaController extends Controller
     {
         $data = $request->validated();
         $kosnice->update($data);
-
         return response()->json([
             'message' => 'Košnica uspešno ažurirana',
             'model' => new KosnicaResource($kosnice)

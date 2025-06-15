@@ -17,7 +17,7 @@ class KomentarController extends Controller
     public function index()
     {
         $user=Auth::user();
-        $komentari=Komentar::where('user_id',$user->id);
+        $komentari=Komentar::with('user')->where('user_id',$user->id);
         return KomentarResource::collection($komentari->latest()->paginate());
     }
 

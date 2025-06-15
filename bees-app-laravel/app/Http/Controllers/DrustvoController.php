@@ -15,12 +15,16 @@ class DrustvoController extends Controller
      * Display a listing of the resource.
      */
     public function index()
-    {//drustvo-kosnica-pcelinjak-user
+    { //drustvo-kosnica-pcelinjak-user
         $user = Auth::user();
-        $drustva = Drustvo::whereHas('kosnica.pcelinjak', function ($query) use ($user) {
-            $query->where('user_id', $user->id);
-        });
-        return DrustvoResource::collection($drustva->latest()->paginate());
+        $drustva = Drustvo::with('kosnice')
+            ->whereHas('kosnice.pcelinjak', function ($query) use ($user) {
+                $query->where('user_id', $user->id);
+            })
+            ->latest()
+            ->paginate();
+
+        return DrustvoResource::collection($drustva);
     }
 
     /**
@@ -43,7 +47,8 @@ class DrustvoController extends Controller
      */
     public function show(Drustvo $drustva)
     {
-        if (Gate::authorize('view', $drustva)) { 
+        if (Gate::authorize('view', $drustva)) {
+            $drustva->load(['kosnica']);
             return new DrustvoResource($drustva);
         }
     }

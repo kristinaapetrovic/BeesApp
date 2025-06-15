@@ -17,7 +17,8 @@ class PcelinjakController extends Controller
     public function index()
     {
         $user = Auth::user();
-        $pcelinjaci = Pcelinjak::where('user_id', $user->id);
+        $filteri = request()->only('lokacija');
+        $pcelinjaci = Pcelinjak::with('user')->filter($filteri, $user);
         return PcelinjakResource::collection($pcelinjaci->latest()->paginate());
     }
 

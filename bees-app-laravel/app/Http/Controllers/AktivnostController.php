@@ -17,8 +17,12 @@ class AktivnostController extends Controller
     public function index()
     {
         $user = Auth::user();
-        $aktivnosti = Aktivnost::where('user_id', $user->id);
-        return AktivnostResource::collection($aktivnosti->latest()->paginate());
+        $filteri = request()->only('tip', 'status', 'pocetak', 'drustvo');
+        $aktivnosti = Aktivnost::with(['user', 'drustvo', 'komentars', 'sugestijes'])
+            ->filter($filteri, $user)
+            ->latest()
+            ->paginate();
+        return AktivnostResource::collection($aktivnosti);
     }
 
     /**
@@ -44,7 +48,8 @@ class AktivnostController extends Controller
      */
     public function show(Aktivnost $aktivnosti)
     {
-        if (Gate::authorize('view', $aktivnosti)) { 
+        if (Gate::authorize('view', $aktivnosti)) {
+            $aktivnosti->load(['drustvo', 'user', 'komenatrs', 'sugestijes']);
             return new AktivnostResource($aktivnosti);
         }
     }
