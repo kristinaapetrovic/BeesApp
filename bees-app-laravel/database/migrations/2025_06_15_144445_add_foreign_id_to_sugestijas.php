@@ -1,7 +1,6 @@
 <?php
 
 use App\Models\Aktivnost;
-use App\Models\User;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
@@ -13,13 +12,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('sugestijas', function (Blueprint $table) {
-            $table->id();
-            $table->text('poruka');
-            $table->date('datum_kreiranja');
-
-            $table->foreignIdFor(User::class)->constrained()->onDelete('cascade');
-            $table->timestamps();
+        Schema::table('sugestijas', function (Blueprint $table) {
+            $table->foreignIdFor(Aktivnost::class)->constrained()->onDelete('cascade');
         });
     }
 
@@ -28,6 +22,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('sugestijas');
+        Schema::table('sugestijas', function (Blueprint $table) {
+            $table->dropForeign(['aktivnost_id']);
+            $table->dropColumn('aktivnost_id');
+        });
     }
 };

@@ -20,7 +20,8 @@ return new class extends Migration
             $table->text('opis')->nullable();
             $table->enum('tip', Aktivnost::$tip);
             $table->dateTime('pocetak');
-            $table->date('kraj')->nullable();
+            $table->date('kraj');
+            $table->integer('trajanje');
             $table->enum('status', Aktivnost::$status)->default('PLANIRANA');
             $table->foreignIdFor(Drustvo::class)->constrained()->onDelete('cascade');
             $table->foreignIdFor(User::class)->constrained()->onDelete('cascade');
