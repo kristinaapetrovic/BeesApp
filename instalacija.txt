@@ -5,5 +5,13 @@ composer require laravel/sanctum
 php artisan vendor:publish --provider="Laravel\Sanctum\SanctumServiceProvider"
 php artisan migrate
 
+php artisan notifications:table
 
-php artisan make:migration add_deleted_at_to_notifikacijas 
+composer require spatie/browsershot
+
+
+composer require phpoffice/phpword - NE
+
+php artisan aktivnosti:posalji-notifikacije-sutra
+
+
