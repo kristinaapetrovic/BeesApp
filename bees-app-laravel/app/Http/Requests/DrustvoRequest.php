@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use App\Models\Drustvo;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Auth\Access\AuthorizationException;
 
 class DrustvoRequest extends FormRequest
 {
@@ -55,5 +56,10 @@ class DrustvoRequest extends FormRequest
             'datum_formiranja.required' => 'Datum formiranja je obavezan.',
             'datum_formiranja.date' => 'Datum formiranja mora biti validan datum.',
         ];
+    }
+
+    protected function failedAuthorization()
+    {
+        throw new AuthorizationException('Nemate dozvolu za ovu akciju.');
     }
 }

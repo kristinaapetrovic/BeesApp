@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use App\Models\Aktivnost;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Auth\Access\AuthorizationException;
 
 class AktivnostRequest extends FormRequest
 {
@@ -68,5 +69,10 @@ class AktivnostRequest extends FormRequest
             'drustvo_id.exists' => 'Izabrano društvo ne postoji.',
 
         ];
+    }
+
+    protected function failedAuthorization()
+    {
+        throw new AuthorizationException('Nemate dozvolu za ovu akciju.');
     }
 }

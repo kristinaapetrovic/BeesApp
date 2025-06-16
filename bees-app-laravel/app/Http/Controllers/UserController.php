@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Requests\UserRequest;
@@ -31,10 +32,18 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        if (Gate::authorize('view', $user)) { 
-            return new UserResource($user);
+        if (Gate::allows('view', $user)) {
+            return response()->json([
+                'data' => new UserResource($user),
+            ]);
+        } else {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Nemate dozvolu da pregledate ovog korisnika.',
+            ], 403);
         }
     }
+
 
     /**
      * Update the specified resource in storage.
@@ -55,6 +64,6 @@ class UserController extends Controller
      */
     // public function destroy(string $id)
     // {
-        
+
     // }
 }

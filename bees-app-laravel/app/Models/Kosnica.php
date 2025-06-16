@@ -25,15 +25,17 @@ class Kosnica extends Model
         return $this->hasMany(Drustvo::class);
     }
 
-    public function scopeFilter(Builder|QueryBuilder $query, array $filteri, User $user): Builder|QueryBuilder{
-        return $query->whereHas('pcelinjak', function ($query) use ($user) {
-            $query->where('user_id', $user->id);
-        })->when($filteri['tip'] ?? null, function ($query, $tip){
-            $query->where('tip', $tip);
-        })->when($filteri['status'] ?? null, function ($query, $status){
-            $query->where('status', $status);
-        })->when($filteri['pcelinjak'] ?? null, function ($query, $pcelinjak){
-            $query->where('pcelinjak_id', $pcelinjak);
-        });
+    public function scopeFilter(Builder|QueryBuilder $query, array $filteri, User $user): Builder|QueryBuilder
+    {
+        return $query
+            ->whereHas('pcelinjak', function ($query) use ($user) {
+                $query->where('user_id', $user->id);
+            })->when($filteri['tip'] ?? null, function ($query, $tip) {
+                $query->where('tip', 'like', '%' . $tip . '%');
+            })->when($filteri['status'] ?? null, function ($query, $status) {
+                $query->where('status', $status);
+            })->when($filteri['pcelinjak'] ?? null, function ($query, $pcelinjak) {
+                $query->where('pcelinjak_id', $pcelinjak);
+            });
     }
 }

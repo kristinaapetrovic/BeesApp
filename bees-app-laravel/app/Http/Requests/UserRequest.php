@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Auth\Access\AuthorizationException;
 
 class UserRequest extends FormRequest
 {
@@ -45,5 +46,10 @@ class UserRequest extends FormRequest
             'password.min' => 'Lozinka mora imati najmanje 6 karaktera.',
             'password.confirmed' => 'Lozinke se ne poklapaju.',
         ];
+    }
+
+    protected function failedAuthorization()
+    {
+        throw new AuthorizationException('Nemate dozvolu za ovu akciju.');
     }
 }

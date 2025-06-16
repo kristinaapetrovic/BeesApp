@@ -16,6 +16,7 @@ return new class extends Migration
     {
         Schema::create('aktivnosts', function (Blueprint $table) {
             $table->id();
+
             $table->string('naziv');
             $table->text('opis')->nullable();
             $table->enum('tip', Aktivnost::$tip);
@@ -23,8 +24,10 @@ return new class extends Migration
             $table->date('kraj');
             $table->integer('trajanje');
             $table->enum('status', Aktivnost::$status)->default('PLANIRANA');
+            
             $table->foreignIdFor(Drustvo::class)->constrained()->onDelete('cascade');
             $table->foreignIdFor(User::class)->constrained()->onDelete('cascade');
+
             $table->timestamps();
         });
     }

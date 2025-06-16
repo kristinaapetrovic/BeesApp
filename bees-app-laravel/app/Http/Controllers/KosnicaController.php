@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
 use App\Models\Kosnica;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -42,11 +43,21 @@ class KosnicaController extends Controller
      */
     public function show(Kosnica $kosnice)
     {
-        if (Gate::authorize('view', $kosnice)) { 
-            $kosnice->load(['pcelinjak']);
-            return new KosnicaResource($kosnice);
-        }
+            if (Gate::allows('view', $kosnice)) {
+                $kosnice->load(['pcelinjak']);
+
+                return response()->json([
+                    'data' => new KosnicaResource($kosnice),
+                ]);
+            } else {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Nemate dozvolu da pregledate ovu košnicu.',
+                ], 403);
+            }
+        
     }
+
 
     /**
      * Update the specified resource in storage.
@@ -66,11 +77,19 @@ class KosnicaController extends Controller
      */
     public function destroy(Kosnica $kosnice)
     {
-        if (Gate::authorize('delete', $kosnice)) {
-            $kosnice->delete();
-            return response()->json([
-                'message' => 'Košnica uspešno obrisana',
-            ]);
-        }
+        
+            if (Gate::allows('delete', $kosnice)) {
+                $kosnice->delete();
+
+                return response()->json([
+                    'message' => 'Košnica uspešno obrisana.',
+                ]);
+            } else {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Nemate dozvolu da obrišete ovu košnicu.',
+                ], 403);
+            }
+        
     }
 }

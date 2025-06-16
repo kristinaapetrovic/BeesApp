@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
 use App\Models\Pcelinjak;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -45,10 +46,19 @@ class PcelinjakController extends Controller
      */
     public function show(Pcelinjak $pcelinjaci)
     {
-        if (Gate::authorize('view', $pcelinjaci)) { 
-            return new PcelinjakResource($pcelinjaci);
+
+        if (Gate::allows('view', $pcelinjaci)) {
+            return response()->json([
+                'data' => new PcelinjakResource($pcelinjaci),
+            ]);
+        } else {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Nemate dozvolu da pregledate ovaj pčelinjak.',
+            ], 403);
         }
     }
+
 
     /**
      * Update the specified resource in storage.
@@ -69,11 +79,17 @@ class PcelinjakController extends Controller
      */
     public function destroy(Pcelinjak $pcelinjaci)
     {
-        if (Gate::authorize('delete', $pcelinjaci)) {
+        if (Gate::allows('delete', $pcelinjaci)) {
             $pcelinjaci->delete();
+
             return response()->json([
-                'message' => 'Pčelinjak uspešno obrisan',
+                'message' => 'Pčelinjak uspešno obrisan.',
             ]);
+        } else {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Nemate dozvolu da obrišete ovaj pčelinjak.',
+            ], 403);
         }
     }
 }

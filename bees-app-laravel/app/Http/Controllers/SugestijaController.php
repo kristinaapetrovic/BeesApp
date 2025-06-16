@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
 use App\Models\Sugestija;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -59,12 +60,20 @@ class SugestijaController extends Controller
      * Remove the specified resource from storage.
      */
     public function destroy(Sugestija $sugestije)
-    {
-        if (Gate::authorize('delete', $sugestije)) {
+{
+        if (Gate::allows('delete', $sugestije)) {
             $sugestije->delete();
+
             return response()->json([
-                'message' => 'Sugestija uspešno obrisana',
+                'message' => 'Sugestija uspešno obrisana.',
             ]);
+        } else {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Nemate dozvolu da obrišete ovu sugestiju.',
+            ], 403);
         }
-    }
+    
+}
+
 }

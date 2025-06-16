@@ -34,7 +34,9 @@ class Aktivnost extends Model
     }
 
     public function scopeFilter(Builder|QueryBuilder $query, array $filteri, User $user): Builder|QueryBuilder{
-        return $query->where('user_id', $user->id)->when($filteri['pocetak'] ?? null, function ($query, $pocetak){
+        return $query
+        ->where('user_id', $user->id)
+        ->when($filteri['pocetak'] ?? null, function ($query, $pocetak){
             $query->whereMonth('pocetak', $pocetak);
         })->when($filteri['tip'] ?? null, function ($query, $tip){
             $query->where('tip', $tip);

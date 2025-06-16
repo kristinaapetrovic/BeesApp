@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
 use App\Models\Komentar;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,8 +17,8 @@ class KomentarController extends Controller
      */
     public function index()
     {
-        $user=Auth::user();
-        $komentari=Komentar::with('user')->where('user_id',$user->id);
+        $user = Auth::user();
+        $komentari = Komentar::with('user')->where('user_id', $user->id);
         return KomentarResource::collection($komentari->latest()->paginate());
     }
 
@@ -44,7 +45,7 @@ class KomentarController extends Controller
      */
     // public function show(string $id)
     // {
-        
+
     // }
 
     /**
@@ -60,11 +61,18 @@ class KomentarController extends Controller
      */
     public function destroy(Komentar $komentari)
     {
-        if (Gate::authorize('delete', $komentari)) {
-            $komentari->delete();
-            return response()->json([
-                'message' => 'Komentar uspešno obrisan',
-            ]);
-        }
+            if (Gate::allows('delete', $komentari)) {
+                $komentari->delete();
+
+                return response()->json([
+                    'message' => 'Komentar uspešno obrisan.',
+                ]);
+            } else {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Nemate dozvolu da obrišete ovaj komentar.',
+                ], 403);
+            }
+        
     }
 }

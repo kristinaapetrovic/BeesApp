@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
 use App\Models\Drustvo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -23,7 +24,6 @@ class DrustvoController extends Controller
             })
             ->latest()
             ->paginate();
-
         return DrustvoResource::collection($drustva);
     }
 
@@ -47,11 +47,22 @@ class DrustvoController extends Controller
      */
     public function show(Drustvo $drustva)
     {
-        if (Gate::authorize('view', $drustva)) {
-            $drustva->load(['kosnica']);
-            return new DrustvoResource($drustva);
-        }
+       
+            if (Gate::allows('view', $drustva)) {
+                $drustva->load(['kosnica']);
+
+                return response()->json([
+                    'data' => new DrustvoResource($drustva),
+                ]);
+            } else {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Nemate dozvolu da pregledate ovo društvo.',
+                ], 403);
+            }
+        
     }
+
 
     /**
      * Update the specified resource in storage.
@@ -72,11 +83,18 @@ class DrustvoController extends Controller
      */
     public function destroy(Drustvo $drustva)
     {
-        if (Gate::authorize('delete', $drustva)) {
-            $drustva->delete();
-            return response()->json([
-                'message' => 'Društvo uspešno obrisano',
-            ]);
-        }
+            if (Gate::allows('delete', $drustva)) {
+                $drustva->delete();
+
+                return response()->json([
+                    'message' => 'Društvo uspešno obrisano.',
+                ]);
+            } else {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Nemate dozvolu da obrišete ovo društvo.',
+                ], 403);
+            }
+       
     }
 }

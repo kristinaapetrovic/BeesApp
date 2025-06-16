@@ -1,0 +1,30 @@
+composer create-project --prefer-dist laravel/laravel bees-app
+
+php artisan make:model NazivModela -mf
+php artisan make:seeder NazivSeeder
+php artisan migrate
+php artisan db:seed
+php artisan make:resource NazviResource
+php artisan make:policy NazivPolicy --model=Naziv
+php artisan make:request NazivRequest
+php artisan make:controller NazivController
+php artisan make:controller NazivController --api
+php artisan make:controller NazivController --resource
+
+
+composer require laravel/sanctum
+php artisan vendor:publish --provider="Laravel\Sanctum\SanctumServiceProvider"
+php artisan migrate
+
+php artisan make:notification Notifikacija
+php artisan notifications:table
+php artisan migrate
+
+php artisan aktivnosti:posalji-notifikacije-sutra
+
+
+composer require phpoffice/phpword
+php artisan make:component Button --view
+
+
+php artisan make:migration remove_column_from_aktivnosts

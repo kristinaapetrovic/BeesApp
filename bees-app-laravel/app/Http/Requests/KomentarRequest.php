@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use App\Models\Komentar;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Auth\Access\AuthorizationException;
 
 class KomentarRequest extends FormRequest
 {
@@ -51,5 +52,11 @@ class KomentarRequest extends FormRequest
             'aktivnost_id.exists' => 'Izabrana aktivnost ne postoji.',
 
         ];
+    }
+
+
+    protected function failedAuthorization()
+    {
+        throw new AuthorizationException('Nemate dozvolu za ovu akciju.');
     }
 }

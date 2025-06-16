@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use App\Models\Sugestija;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Auth\Access\AuthorizationException;
 
 class SugestijaRequest extends FormRequest
 {
@@ -50,5 +51,10 @@ class SugestijaRequest extends FormRequest
             'aktivnost_id.required' => 'Aktivnost je obavezna.',
             'aktivnost_id.exists' => 'Izabrana aktivnost ne postoji.',
         ];
+    }
+
+    protected function failedAuthorization()
+    {
+        throw new AuthorizationException('Nemate dozvolu za ovu akciju.');
     }
 }

@@ -54,6 +54,9 @@ class AuthController extends Controller
             'password' => 'required|string|min:8'
         ]);
         $user = User::create($validatedUser);
-        return new UserResource($user);
+        return response()->json([
+            'message' => 'Account created',
+            'user' => new UserResource($user)
+        ]);
     }
 }

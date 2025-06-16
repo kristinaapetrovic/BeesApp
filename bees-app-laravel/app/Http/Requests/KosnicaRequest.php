@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use App\Models\Kosnica;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Auth\Access\AuthorizationException;
 
 class KosnicaRequest extends FormRequest
 {
@@ -56,5 +57,10 @@ class KosnicaRequest extends FormRequest
             'pcelinjak_id.required' => 'Pčelinjak je obavezan.',
             'pcelinjak_id.exists' => 'Izabrani pčelinjak ne postoji.',
         ];
+    }
+
+    protected function failedAuthorization()
+    {
+        throw new AuthorizationException('Nemate dozvolu za ovu akciju.');
     }
 }

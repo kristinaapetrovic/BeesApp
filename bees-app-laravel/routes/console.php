@@ -18,7 +18,7 @@ Artisan::command('aktivnosti:posalji-notifikacije-sutra', function () {
     }
 
     foreach ($aktivnosti as $aktivnost) {
-        $user = $aktivnost->user ?? $aktivnost->drustvo->user ?? null;
+        $user = $aktivnost->user ?? null;
 
         if ($user) {
             $user->notify(new \App\Notifications\Notifikacija($aktivnost));

@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use App\Models\Pcelinjak;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Auth\Access\AuthorizationException;
 
 class PcelinjakRequest extends FormRequest
 {
@@ -49,5 +50,10 @@ class PcelinjakRequest extends FormRequest
             'lokacija.max' => 'Lokacija ne sme biti duža od 255 karaktera.',
 
         ];
+    }
+
+    protected function failedAuthorization()
+    {
+        throw new AuthorizationException('Nemate dozvolu za ovu akciju.');
     }
 }
